@@ -1,9 +1,25 @@
 ﻿@{
     ViewData["Title"] = "Admin Panel";
 }
-<h1>Ürün Listesi</h1>
-<button id="loadProducts">Ürünleri Getir</button>
-<ul id="productList"></ul>
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Ürün Listesi</h1>
+    <div class="d-flex justify-content-center mb-3">
+        <button id="loadProducts" class="btn btn-primary">Ürünleri Getir</button>
+    </div>
+
+    <table class="table table-striped table-bordered text-center" id="productTable">
+        <thead>
+            <tr>
+                <th>Ürün Adı</th>
+                <th>Fiyat</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Ürün satırları buraya eklenecek -->
+        </tbody>
+    </table>
+</div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -13,22 +29,29 @@
             method: "GET",
             dataType: "json",
             success: function (response) {
-                console.log("API'den gelen yanıt:", response);  // Veriyi kontrol etmek için
+                console.log("API'den gelen yanıt:", response); // Veriyi kontrol etmek için
 
-                // `response.data` üzerinden veriye erişmemiz gerekiyor
                 if (Array.isArray(response.data)) {
-                    $("#productList").empty();
+                    $("#productTable tbody").empty(); // Tablodaki mevcut satırları temizle
                     response.data.forEach(product => {
-                        $("#productList").append(`<li>${product.name} - ${product.price}₺</li>`);
+                        // Her ürün için bir satır oluştur
+                        const row = `
+                                <tr>
+                                    <td>${product.name}</td>
+                                    <td>${product.price}₺</td>
+                                    <td><button class="deleteProduct" data-id="${product.id}">Sil</button></td>
+                                </tr>
+                            `;
+                        $("#productTable tbody").append(row);
+                    });
+
+                    // Silme butonu için click event'ini bağlama
+                    $(".deleteProduct").click(function () {
+                        const productId = $(this).data("id");
+                        deleteProduct(productId, $(this).closest("tr")); // Ürün ID ve satırı parametre olarak gönder
                     });
                 } else {
                     console.error("Beklenen veri formatı bir dizi değil:", response);
-                    $("#productList").empty();
-                    if (response.data && response.data.name && response.data.price) {
-                        $("#productList").append(`<li>${response.data.name} - ${response.data.price}₺</li>`);
-                    } else {
-                        console.error("Veri yapısı beklenen formatta değil:", response);
-                    }
                 }
             },
             error: function (err) {
@@ -37,5 +60,18 @@
         });
     });
 
-
+    // Ürün silme işlemi
+    function deleteProduct(productId, row) {
+        $.ajax({
+            url: `http://localhost:5001/api/Product/delete/${productId}`, // Silme API'si
+            method: "DELETE",
+            success: function () {
+                console.log(`Ürün (ID: ${productId}) silindi.`);
+                row.remove(); // Başarıyla silindiğinde tablo satırını kaldır
+            },
+            error: function (err) {
+                console.error("Silme işlemi sırasında hata oluştu:", err);
+            }
+        });
+    }
 </script>

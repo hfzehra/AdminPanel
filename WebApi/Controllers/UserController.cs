@@ -7,19 +7,19 @@ namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class UserController : ControllerBase
     {
-        ICategoryService _categoryService;
+        IUserService _userService;
 
-        public CategoryController(ICategoryService categoryService)
+        public UserController(IUserService userService)
         {
-            _categoryService = categoryService;
+            _userService = userService;
         }
 
         [HttpGet("getall")]
         public IActionResult GetAll()
         {
-            var result = _categoryService.GetAll();
+            var result = _userService.GetAll();
             if (result.Success)
             {
                 return Ok(result);
@@ -30,7 +30,7 @@ namespace WebApi.Controllers
         [HttpGet("getbyid")]
         public IActionResult Get(int id)
         {
-            var result = _categoryService.GetByIdCategory(id);
+            var result = _userService.GetByIdUser(id);
             if (result.Success)
             {
                 return Ok(result);
@@ -39,9 +39,9 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("add")]
-        public IActionResult Add(Category category)
+        public IActionResult Add(User user)
         {
-            var result = _categoryService.Add(category);
+            var result = _userService.Add(user);
             if (result.Success)
             {
                 return Ok(result);
@@ -50,9 +50,9 @@ namespace WebApi.Controllers
         }
 
         [HttpPut("update")]
-        public IActionResult Update(Category category)
+        public IActionResult Update(User user)
         {
-            var result = _categoryService.Update(category);
+            var result = _userService.Update(user);
             if (result.Success)
             {
                 return Ok(result);
@@ -61,15 +61,14 @@ namespace WebApi.Controllers
         }
 
         [HttpDelete("delete")]
-        public IActionResult Delete(Category category)
+        public IActionResult Delete(User user)
         {
-            var result = _categoryService.Delete(category);
+            var result = _userService.Delete(user);
             if (result.Success)
             {
                 return Ok(result);
             }
             return BadRequest(result);
         }
-
     }
 }

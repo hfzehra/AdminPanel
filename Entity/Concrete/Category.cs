@@ -11,7 +11,6 @@ namespace Entity.Concrete
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public virtual ProductCategory ProductCategory { get; set; }
 
     }
 }

@@ -1,8 +1,41 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Admin Panel";
 }
+<h1>Ürün Listesi</h1>
+<button id="loadProducts">Ürünleri Getir</button>
+<ul id="productList"></ul>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $("#loadProducts").click(function () {
+        $.ajax({
+            url: "http://localhost:5001/api/Product/getall",
+            method: "GET",
+            dataType: "json",
+            success: function (response) {
+                console.log("API'den gelen yanıt:", response);  // Veriyi kontrol etmek için
+
+                // `response.data` üzerinden veriye erişmemiz gerekiyor
+                if (Array.isArray(response.data)) {
+                    $("#productList").empty();
+                    response.data.forEach(product => {
+                        $("#productList").append(`<li>${product.name} - ${product.price}₺</li>`);
+                    });
+                } else {
+                    console.error("Beklenen veri formatı bir dizi değil:", response);
+                    $("#productList").empty();
+                    if (response.data && response.data.name && response.data.price) {
+                        $("#productList").append(`<li>${response.data.name} - ${response.data.price}₺</li>`);
+                    } else {
+                        console.error("Veri yapısı beklenen formatta değil:", response);
+                    }
+                }
+            },
+            error: function (err) {
+                console.error("Hata oluştu:", err);
+            }
+        });
+    });
+
+
+</script>

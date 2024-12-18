@@ -18,7 +18,7 @@ namespace UI.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult ProductAdded()
         {
             return View();
         }

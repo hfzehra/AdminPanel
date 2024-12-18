@@ -1,5 +1,9 @@
 
+using Business.Abstract;
+using Business.Concrete;
+using DataAccess.Abstract;
 using DataAccess.Concrete.EntitiyFramework;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 namespace WebApi
@@ -16,9 +20,22 @@ namespace WebApi
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddDbContext<AdminPanelContext>(options =>
-           options.UseSqlServer(builder.Configuration.GetConnectionString("AdminPanelDB")));
 
+            builder.Services.AddSingleton<ICategoryService, CategoryManager>();
+            builder.Services.AddSingleton<ICategoryDal, EfCategoryDal>();
+
+            builder.Services.AddSingleton<IProductService, ProductManager>();
+            builder.Services.AddSingleton<IProductDal, EfProductDal>();
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigins", policy =>
+                {
+                    policy.WithOrigins("http://localhost:5002") // Ýzin verilen origin
+                            .AllowAnyMethod()
+                            .AllowAnyHeader();
+                });
+            });
 
             var app = builder.Build();
 
@@ -28,6 +45,13 @@ namespace WebApi
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            // CORS policy tanýmla
+          
+
+            // CORS policy kullan
+            app.UseCors("AllowSpecificOrigins");
+
 
             app.UseHttpsRedirection();
 

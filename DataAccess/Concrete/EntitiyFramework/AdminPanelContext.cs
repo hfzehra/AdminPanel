@@ -12,7 +12,8 @@ namespace DataAccess.Concrete.EntitiyFramework
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server =(localdb)\ZEHRA; Database=RentCar; Trusted_Connection=true");
+            optionsBuilder.UseSqlServer(@"Server =(localdb)\ZEHRA; Database=AdminDatabase; Trusted_Connection=true");
+            //optionsBuilder.UseInMemoryDatabase("RentACar");
         }
 
         public DbSet<Category> Categories { get; set; }

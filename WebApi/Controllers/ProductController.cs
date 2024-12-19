@@ -50,8 +50,13 @@ namespace WebApi.Controllers
         }
 
         [HttpPut("update")]
-        public IActionResult Update(Product product)
+        public IActionResult Update([FromBody]Product product)
         {
+            if (product == null || product.Id <= 0)
+            {
+                return BadRequest("Geçersiz ürün verisi");
+            }
+
             var result = _productService.Update(product);
             if (result.Success)
             {
@@ -60,10 +65,10 @@ namespace WebApi.Controllers
             return BadRequest(result);
         }
 
-        [HttpDelete("delete")]
-        public IActionResult Delete(Product product)
+        [HttpDelete("delete/{id}")]
+        public IActionResult Delete(int id)
         {
-            var result = _productService.Delete(product);
+            var result = _productService.Delete(id);
             if (result.Success)
             {
                 return Ok(result);

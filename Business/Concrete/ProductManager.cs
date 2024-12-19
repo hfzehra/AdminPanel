@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
+using DataAccess.Concrete.EntitiyFramework;
 using Entity.Concrete;
 using System;
 using System.Collections.Generic;
@@ -24,11 +25,17 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-        public IResult Delete(Product product)
+
+        public IResult Delete(int id)
         {
-            var deletedProduct = _productDal.Get(b => b.Id == product.Id);
-            _productDal.Delete(deletedProduct);
-            return new SuccessResult();
+            var product = _productDal.Get(c => c.Id == id);
+            if (product == null)
+            {
+                return new ErrorResult("Kategori bulunamadı.");
+            }
+
+            _productDal.Delete(product);
+            return new SuccessResult("Kategori başarıyla silindi.");
         }
 
         public IDataResult<List<Product>> GetAll()
@@ -54,10 +61,16 @@ namespace Business.Concrete
             var existingProduct = _productDal.Get(p => p.Id == product.Id);
             if (existingProduct == null)
             {
-                return new ErrorResult("Güncellenecek ürün bulunamadı.");
+                return new ErrorResult("Ürün bulunamadı");
             }
-            _productDal.Update(product);
-            return new SuccessResult("Ürün başarıyla güncellendi.");
+
+            existingProduct.Name = product.Name;
+            existingProduct.Description = product.Description;
+            existingProduct.Price = product.Price;
+
+            _productDal.Update(existingProduct);
+            return new SuccessResult("Ürün başarıyla güncellendi");
         }
+
     }
 }

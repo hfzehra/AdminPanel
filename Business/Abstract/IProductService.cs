@@ -13,7 +13,7 @@ namespace Business.Abstract
         IDataResult<List<Product>> GetAll();
         IDataResult<Product> GetByIdProduct(int id);
         IResult Add(Product product);
-        IResult Delete(Product product);
+        IResult Delete(int id);
         IResult Update(Product product);
     }
 }

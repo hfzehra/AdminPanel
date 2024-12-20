@@ -60,10 +60,10 @@ namespace WebApi.Controllers
             return BadRequest(result);
         }
 
-        [HttpDelete("delete")]
-        public IActionResult Delete(Category category)
+        [HttpDelete("delete/{id}")]
+        public IActionResult Delete(int id)
         {
-            var result = _categoryService.Delete(category);
+            var result = _categoryService.Delete(id);
             if (result.Success)
             {
                 return Ok(result);

@@ -3,6 +3,7 @@ using Core.Utilities.Results;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntitiyFramework;
 using Entity.Concrete;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,12 +26,18 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-        public IResult Delete(Category category)
+        public IResult Delete(int id)
         {
-            var deleteCategory = _categoryDal.Get(c => c.Id == category.Id);
-            _categoryDal.Delete(deleteCategory);
-            return new SuccessResult();
+            var category = _categoryDal.Get(c => c.Id == id); 
+            if (category == null)
+            {
+                return new ErrorResult("Kategori bulunamadı.");
+            }
+
+            _categoryDal.Delete(category);
+            return new SuccessResult("Kategori başarıyla silindi.");
         }
+
 
         public IDataResult<List<Category>> GetAll()
         {
@@ -52,14 +59,18 @@ namespace Business.Concrete
 
         public IResult Update(Category category)
         {
-            var existingProduct = _categoryDal.Get(p => p.Id == category.Id);
-            if (existingProduct == null)
+            var existingCategory = _categoryDal.Get(c => c.Id == category.Id); 
+            if (existingCategory == null)
             {
-                return new ErrorResult("Güncellenecek ürün bulunamadı.");
+                return new ErrorResult("Kategori bulunamadı.");
             }
-            _categoryDal.Update(category);
-            return new SuccessResult("Ürün başarıyla güncellendi.");
 
+            // Mevcut kategoriyi güncelleme
+            existingCategory.Name = category.Name;
+            existingCategory.Description = category.Description;
+
+            _categoryDal.Update(existingCategory);
+            return new SuccessResult("Kategori başarıyla güncellendi.");
         }
     }
 }

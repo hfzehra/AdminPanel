@@ -13,6 +13,7 @@
                 <th>Ürün Adı</th>
                 <th>Ürün Açıklaması</th>
                 <th>Fiyat</th>
+                <th>Kategori</th>
                 <th>İşlemler</th>
             </tr>
         </thead>
@@ -57,7 +58,7 @@
 <script>
     $("#loadProducts").click(function () {
         $.ajax({
-            url: "http://localhost:5001/api/Product/getall",
+            url: "http://localhost:5001/api/Product/getallProduct",
             method: "GET",
             dataType: "json",
             success: function (response) {
@@ -71,6 +72,7 @@
                                     <td>${product.name}</td>
                                     <td>${product.description}</td>
                                     <td>${product.price}</td>
+                                    <td>${product.categoryName}</td>
                                     <td>
                                         <button class="updateProduct btn btn-warning" data-id="${product.id}" data-name="${product.name}" data-description="${product.description}" data-price="${product.price}">Güncelle</button>
                                         <button class="deleteProduct btn btn-danger" data-id="${product.id}">Sil</button>

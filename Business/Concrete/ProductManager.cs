@@ -3,6 +3,8 @@ using Core.Utilities.Results;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntitiyFramework;
 using Entity.Concrete;
+using Entity.DTOs;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,6 +80,11 @@ namespace Business.Concrete
 
             _productDal.Update(existingProduct);
             return new SuccessResult("Ürün başarıyla güncellendi");
+        }
+
+        public List<ProductListDTO> GetProductsWithCategory()
+        {
+            return _productDal.GetProductsWithCategory();
         }
 
     }

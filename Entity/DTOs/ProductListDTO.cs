@@ -5,14 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entity.Concrete
+namespace Entity.DTOs
 {
-    public class Category : Entity<int>
+    public class ProductListDTO : IDto
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-
-        public virtual ICollection<Product> Products { get; set; }
-
+        public double Price { get; set; }
+        public string CategoryName { get; set; }
     }
+
 }

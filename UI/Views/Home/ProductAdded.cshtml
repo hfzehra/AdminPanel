@@ -50,18 +50,22 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-        $(document).ready(function () {
-        // Kategorileri getir ve dropdown'a ekle
+    $(document).ready(function () {
         $.ajax({
-            url: "http://localhost:5001/api/Category/getall", // Kategorileri getiren API endpoint'i
+            url: "http://localhost:5001/api/Category/getall",
             method: "GET",
             success: function (response) {
-                // Gelen kategorileri dropdown'a ekle
-                response.forEach(category => {
-                    $("#CategoryId").append(
-                        `<option value="${category.id}">${category.name}</option>`
-                    );
-                });
+                console.log("Gelen yanıt:", response); 
+
+                if (Array.isArray(response.data)) {
+                    response.data.forEach(category => {
+                        $("#CategoryId").append(
+                            `<option value="${category.id}">${category.name}</option>`
+                        );
+                    });
+                } else {
+                    console.error("Beklenen dizi formatında veri gelmedi.");
+                }
             },
             error: function (err) {
                 console.error("Kategoriler yüklenirken hata oluştu:", err);
@@ -70,30 +74,32 @@
         });
     });
 
+
+
     // Ürün ekleme işlemi
     $("#addProductBtn").click(function () {
-        // Formdaki verileri al
+        
         const productData = {
             name: $("#Name").val(),
             description: $("#Description").val(),
             price: parseFloat($("#Price").val()),
             imageUrl: $("#ImageUrl").val(),
-            categoryId: parseInt($("#CategoryId").val()) // Dropdown'dan seçilen kategori ID
+            categoryId: parseInt($("#CategoryId").val())
         };
 
-        console.log("Gönderilecek ürün:", productData); // Kontrol için
+        console.log("Gönderilecek ürün:", productData);
 
         // AJAX isteği gönder
         $.ajax({
-            url: "http://localhost:5001/api/Product/add", // API'nin ürün ekleme endpoint'i
+            url: "http://localhost:5001/api/Product/add",
             method: "POST",
             contentType: "application/json",
-            data: JSON.stringify(productData), // Veriyi JSON formatına dönüştür
+            data: JSON.stringify(productData), 
             success: function (response) {
                 console.log("Ürün başarıyla eklendi:", response);
                 $("#successMessage").removeClass("d-none");
                 $("#errorMessage").addClass("d-none");
-                $("#productForm")[0].reset(); // Formu sıfırla
+                $("#productForm")[0].reset();
             },
             error: function (err) {
                 console.error("Ürün ekleme hatası:", err);

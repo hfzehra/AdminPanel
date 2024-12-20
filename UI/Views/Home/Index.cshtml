@@ -101,33 +101,33 @@
         $("#updateDescription").val(productDescription);
         $("#updatePrice").val(productPrice);
 
-        // Modalı göster
+        
         $("#updateModal").modal("show");
     });
 
     $("#updateProductForm").submit(function (e) {
-        e.preventDefault(); // Formun normal submit işlemini engelle
+        e.preventDefault(); 
 
-        const productId = $("#updateProductId").val(); // Ürün ID'sini al
+        const productId = $("#updateProductId").val(); 
         const updatedProduct = {
             id: productId,
-            name: $("#updateName").val(), // Güncellenmiş ürün adı
-            description: $("#updateDescription").val(), // Güncellenmiş açıklama
-            price: parseFloat($("#updatePrice").val()) // Güncellenmiş fiyat (float olarak gönder)
+            name: $("#updateName").val(), 
+            description: $("#updateDescription").val(),
+            price: parseFloat($("#updatePrice").val()) 
         };
 
         $.ajax({
-            url: `http://localhost:5001/api/Product/update`, // Güncelleme için API URL'si
-            method: "PUT", // PUT metodunu kullanıyoruz
-            contentType: "application/json", // JSON formatında veri gönderiyoruz
-            data: JSON.stringify(updatedProduct), // Güncellenmiş veriyi JSON string formatında gönderiyoruz
+            url: `http://localhost:5001/api/Product/update`,
+            method: "PUT",
+            contentType: "application/json",
+            data: JSON.stringify(updatedProduct), 
             success: function () {
-                console.log(`Ürün (ID: ${productId}) güncellendi.`); // Başarı mesajı
-                $("#updateModal").modal("hide"); // Modalı kapat
-                $("#loadProducts").click(); // Ürünleri tekrar yükle
+                console.log(`Ürün (ID: ${productId}) güncellendi.`); 
+                $("#updateModal").modal("hide");
+                $("#loadProducts").click();
             },
             error: function (err) {
-                console.error("Ürün güncelleme hatası:", err); // Hata mesajını konsola yazdır
+                console.error("Ürün güncelleme hatası:", err); 
             }
         });
     });

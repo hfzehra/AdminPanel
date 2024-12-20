@@ -65,7 +65,6 @@ namespace Business.Concrete
                 return new ErrorResult("Kategori bulunamadı.");
             }
 
-            // Mevcut kategoriyi güncelleme
             existingCategory.Name = category.Name;
             existingCategory.Description = category.Description;
 

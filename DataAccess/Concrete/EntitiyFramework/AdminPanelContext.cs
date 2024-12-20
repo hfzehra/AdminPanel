@@ -12,7 +12,9 @@ namespace DataAccess.Concrete.EntitiyFramework
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server =(localdb)\ZEHRA; Database=AdminDatabase; Trusted_Connection=true");
+            optionsBuilder
+            .UseLazyLoadingProxies()
+            .UseSqlServer(@"Server =(localdb)\ZEHRA; Database=AdminDatabase; Trusted_Connection=true");
             //optionsBuilder.UseInMemoryDatabase("RentACar");
         }
 

@@ -15,19 +15,20 @@ namespace DataAccess.Concrete.EntitiyFramework
     {
         public List<ProductListDTO> GetProductsWithCategory()
         {
-            using (var context = new AdminPanelContext())
+            using (AdminPanelContext dto = new AdminPanelContext())
             {
-                return context.Products
-                    .Include(p => p.Category) // İlgili kategoriyi dahil ediyoruz
-                    .Select(p => new ProductListDTO
-                    {
-                        Id = p.Id,
-                        Name = p.Name,
-                        Description = p.Description,
-                        Price = p.Price,
-                        CategoryName = p.Category.Name
-                    })
-                    .ToList();
+               var result = from p in dto.Products
+                            join c in dto.Categories
+                            on p.CategoryId equals c.Id
+                            select new ProductListDTO
+                            { 
+                                Id=p.Id,
+                                Name=p.Name,
+                                Description=p.Description,
+                                Price=p.Price,
+                                CategoryName = c.Name
+                            };
+                return result.ToList();
             }
         }
     }

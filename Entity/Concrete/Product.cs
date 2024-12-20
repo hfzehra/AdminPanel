@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Entity.Concrete
@@ -15,7 +16,6 @@ namespace Entity.Concrete
         public string ImageUrl { get; set; }
         public int CategoryId { get; set; }
 
-        public Category Category { get; set; }
 
     }
 }

@@ -5,6 +5,7 @@ using DataAccess.Abstract;
 using DataAccess.Concrete.EntitiyFramework;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 namespace WebApi
 {
@@ -26,6 +27,8 @@ namespace WebApi
 
             builder.Services.AddSingleton<IProductService, ProductManager>();
             builder.Services.AddSingleton<IProductDal, EfProductDal>();
+
+
 
             builder.Services.AddCors(options =>
             {

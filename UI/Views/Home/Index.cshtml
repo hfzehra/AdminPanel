@@ -11,6 +11,7 @@
         <thead>
             <tr>
                 <th>Ürün Adı</th>
+                <th>Ürün Açıklaması</th>
                 <th>Fiyat</th>
                 <th>İşlemler</th>
             </tr>
@@ -38,6 +39,7 @@
                         const row = `
                                 <tr>
                                     <td>${product.name}</td>
+                                    <td>${product.description}</td>
                                     <td>${product.price}₺</td>
                                     <td><button class="deleteProduct" data-id="${product.id}">Sil</button></td>
                                 </tr>
@@ -63,7 +65,7 @@
     // Ürün silme işlemi
     function deleteProduct(productId, row) {
         $.ajax({
-            url: `http://localhost:5001/api/Product/delete/${productId}`, // Silme API'si
+            url: `http://localhost:5001/api/Product/delete`, 
             method: "DELETE",
             success: function () {
                 console.log(`Ürün (ID: ${productId}) silindi.`);

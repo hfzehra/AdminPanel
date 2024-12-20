@@ -24,9 +24,12 @@
                     <input type="url" class="form-control" id="ImageUrl" name="ImageUrl" placeholder="Ürün resmi URL'sini girin">
                 </div>
                 <div class="mb-3">
-                    <label for="CategoryId" class="form-label">Kategori ID</label>
-                    <input type="number" class="form-control" id="CategoryId" name="CategoryId" placeholder="Kategori ID girin" required>
+                    <label for="CategoryId" class="form-label">Kategori</label>
+                    <select class="form-select" id="CategoryId" name="CategoryId" required>
+                        <option value="" disabled selected>Kategori seçin</option>
+                    </select>
                 </div>
+
                 <div class="d-grid">
                     <button type="button" id="addProductBtn" class="btn btn-primary">Ürün Ekle</button>
                 </div>
@@ -43,6 +46,27 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+        $(document).ready(function () {
+        // Kategorileri getir ve dropdown'a ekle
+        $.ajax({
+            url: "http://localhost:5001/api/Category/getall", // Kategorileri getiren API endpoint'i
+            method: "GET",
+            success: function (response) {
+                // Gelen kategorileri dropdown'a ekle
+                response.forEach(category => {
+                    $("#CategoryId").append(
+                        `<option value="${category.id}">${category.name}</option>`
+                    );
+                });
+            },
+            error: function (err) {
+                console.error("Kategoriler yüklenirken hata oluştu:", err);
+                alert("Kategoriler yüklenemedi, lütfen sayfayı yeniden yükleyin.");
+            }
+        });
+    });
+
+    // Ürün ekleme işlemi
     $("#addProductBtn").click(function () {
         // Formdaki verileri al
         const productData = {
@@ -50,7 +74,7 @@
             description: $("#Description").val(),
             price: parseFloat($("#Price").val()),
             imageUrl: $("#ImageUrl").val(),
-            categoryId: parseInt($("#CategoryId").val())
+            categoryId: parseInt($("#CategoryId").val()) // Dropdown'dan seçilen kategori ID
         };
 
         console.log("Gönderilecek ürün:", productData); // Kontrol için
@@ -74,4 +98,5 @@
             }
         });
     });
+
 </script>

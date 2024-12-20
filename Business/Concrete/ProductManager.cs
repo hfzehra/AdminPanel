@@ -13,15 +13,23 @@ namespace Business.Concrete
     public class ProductManager : IProductService
     {
         IProductDal _productDal;
-
-        public ProductManager(IProductDal productDal)
+        ICategoryDal _categoryDal;
+        public ProductManager(IProductDal productDal, ICategoryDal categoryDal)
         {
             _productDal = productDal;
+            _categoryDal = categoryDal;
         }
         public IResult Add(Product product)
         {
+            // Kategori varlığını kontrol et
+            var categoryExists = _categoryDal.Get(c => c.Id == product.CategoryId);
+            if (categoryExists == null)
+            {
+                return new ErrorResult("Geçerli bir kategori bulunamadı. Ürün eklenemedi.");
+            }
+
             _productDal.Add(product);
-            return new SuccessResult();
+            return new SuccessResult("Ürün başarıyla eklendi.");
         }
 
         public IResult Delete(Product product)
